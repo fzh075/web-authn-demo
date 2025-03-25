@@ -19,12 +19,12 @@ export default function Login() {
       });
       const options = await optionsResponse.json();
 
-      const credential = await startRegistration(options);
+      const registrationResponse = await startRegistration({ optionsJSON: options});
 
       const verifyResponse = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential }),
+        body: JSON.stringify(registrationResponse),
       });
       const verifyResult = await verifyResponse.json();
 
@@ -41,19 +41,19 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       // 获取登录选项
-      const optionsResponse = await fetch('/api/login', {
+      const optionsResponse = await fetch(`/api/login?username=${username}`, {
         method: 'GET',
       });
       const options = await optionsResponse.json();
 
       // 开始登录
-      const credential = await startAuthentication(options);
+      const credential = await startAuthentication({ optionsJSON: options});
 
       // 验证登录凭证
       const verifyResponse = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential }),
+        body: JSON.stringify(credential),
       });
       const verifyResult = await verifyResponse.json();
 
